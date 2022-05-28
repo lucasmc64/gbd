@@ -19,8 +19,8 @@ int main() {
 
     /*     generate_string(s, 5); */
 
-        printf("%s\n", s);
-    }
+    //  printf("%s\n", s);
+    //}
 
     FILE *file = fopen("heap_file.heap", "wb+");
     int qtd_registros = 10;
