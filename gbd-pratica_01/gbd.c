@@ -1,6 +1,7 @@
 #include "gbd.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void generate_string(char *string , int length) {
     if(string == NULL || length < 0)
@@ -49,4 +50,14 @@ void isrt_at_end(FILE *file) {
 void read_random(FILE *file, int seq_aluno, Aluno *aluno) {
     fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
     fread(aluno, sizeof(Aluno), 1, file);
+}
+
+void update_random(FILE *file, int seq_aluno, char *novo_nome, char *novo_codigo) {
+    Aluno newAluno;
+    newAluno.seq_aluno = seq_aluno;
+    strcpy(&newAluno.nome_aluno, novo_nome);
+    strcpy(&newAluno.codigo_curso, novo_codigo);
+
+    fseek(file, sizeof(Aluno) * seq_aluno, SEEK_SET);
+    fwrite(&newAluno, sizeof(Aluno), 1, file);
 }
