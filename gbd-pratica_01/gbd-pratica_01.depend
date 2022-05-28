@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1653761988 source:/home/lucasmc64/Code::BlocksProjects/gbd-pratica_01/main.c
+	<stdio.h>
+	<stdlib.h>
+	<sys/sysinfo.h>
+	<math.h>
+
