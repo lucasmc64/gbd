@@ -18,3 +18,17 @@
 1653767077 e:\bibliotecas\documentos\gbd\gbd-pratica_01\gbd.h
 	<stdio.h>
 
+1653769263 source:/home/lucasmc64/Dev/gbd/gbd-pratica_01/main.c
+	"gbd.h"
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+
+1653768706 /home/lucasmc64/Dev/gbd/gbd-pratica_01/gbd.h
+	<stdio.h>
+
+1653769321 source:/home/lucasmc64/Dev/gbd/gbd-pratica_01/gbd.c
+	"gbd.h"
+	<stdio.h>
+	<stdlib.h>
+

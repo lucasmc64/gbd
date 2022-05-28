@@ -26,3 +26,8 @@ void create_heap_file(FILE *file, int nro_de_registros) {
         fwrite(&a, sizeof(Aluno), 1, file);
     }
 }
+
+void read_random(FILE *file, int seq_aluno, Aluno *aluno) {
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fread(aluno, sizeof(Aluno), 1, file);
+}

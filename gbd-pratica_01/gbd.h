@@ -11,7 +11,7 @@ typedef struct aluno {
 
 // R02
 void create_heap_file(FILE *file, int nro_de_registros); // pronto
-void read_random(FILE *file, int seq_aluno); // Lucas Marçal
+void read_random(FILE *file, int seq_aluno, Aluno *aluno); // Lucas Marçal
 void isrt_at_end(FILE *file); // Eduardo
 void update_random(FILE *file, int seq_aluno, char *novo_nome, char *novo_codigo); // Guilherme
 void delete_random(FILE *file, int seq_aluno); // Lucas Matos
