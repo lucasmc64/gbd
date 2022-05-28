@@ -61,3 +61,15 @@ void update_random(FILE *file, int seq_aluno, char *novo_nome, char *novo_codigo
     fseek(file, sizeof(Aluno) * seq_aluno, SEEK_SET);
     fwrite(&newAluno, sizeof(Aluno), 1, file);
 }
+
+void delete_random(FILE *file, int seq_aluno) {
+    Aluno aluno_a_remover;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fread(&aluno_a_remover, sizeof(Aluno), 1, file);
+
+    aluno_a_remover.seq_aluno = -1*aluno_a_remover.seq_aluno;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fwrite(&aluno_a_remover, sizeof(Aluno), 1, file);
+}
