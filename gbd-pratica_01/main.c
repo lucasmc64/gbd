@@ -23,7 +23,9 @@ int main() {
     //}
 
     FILE *file = fopen("heap_file.heap", "wb+");
+
     int qtd_registros = 10;
+
     create_heap_file(file, qtd_registros);
 
     fclose(file);

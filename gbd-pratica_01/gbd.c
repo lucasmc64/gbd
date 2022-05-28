@@ -46,3 +46,7 @@ void isrt_at_end(FILE *file) {
 }
 
 
+void read_random(FILE *file, int seq_aluno, Aluno *aluno) {
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fread(aluno, sizeof(Aluno), 1, file);
+}
