@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/sysinfo.h>
 #include <math.h>
 
 typedef struct aluno {
@@ -19,30 +18,17 @@ void generate_string(char *string , int length) {
     string[length - 1] = '\0';
 }
 
-FILE *create_heap_file(int nro_de_registros) {
+void create_heap_file(FILE *file, int nro_de_registros) {
     for(int i = 0; i < nro_de_registros; i++) {
         Aluno a;
 
-        // a.seq_aluno = i;
-        //a.codigo_curso = "";
-        //a.nome_aluno = "";
+        a.seq_aluno = i;
+        generate_string(&(a.codigo_curso), sizeof(a.codigo_curso));
+        generate_string(&(a.nome_aluno), sizeof(a.nome_aluno));
     }
 }
 
 int main() {
-    struct sysinfo info;
-    sysinfo(&info);
-
-    long ram_size = info.totalram; // Em bytes
-    printf("RAM: %ld bytes\n", ram_size);
-
-    long qtd_registros = (5 * ram_size) / 50;
-
-    printf("Quantidade de registos: %ld\n", qtd_registros);
-
-
-    printf("\n\n\n");
-
     struct aluno teste;
 
     printf("Tamanho seq_aluno: %d\n", sizeof(teste.seq_aluno));
@@ -56,12 +42,13 @@ int main() {
     for(int i = 0; i < 10; i++) {
         char s[5];
 
-        generate_string(&s, 5);
+        generate_string(s, 5);
 
-        printf("%s\n", s);
+        // printf("%s\n", s);
     }
 
-    // FILE *file = create_heap_file(qtd_registros);
+    //FILE *file;
+    //create_heap_file(&(file), qtd_registros);
 
     return 0;
 }
