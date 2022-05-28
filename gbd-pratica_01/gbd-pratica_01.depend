@@ -5,12 +5,13 @@
 	<sys/sysinfo.h>
 	<math.h>
 
-1653764439 source:e:\bibliotecas\documentos\gbd\gbd-pratica_01\main.c
+1653768834 source:e:\bibliotecas\documentos\gbd\gbd-pratica_01\main.c
+	"gbd.h"
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
 
-1653767077 source:e:\bibliotecas\documentos\gbd\gbd-pratica_01\gbd.c
+1653769730 source:e:\bibliotecas\documentos\gbd\gbd-pratica_01\gbd.c
 	"gbd.h"
 	<stdio.h>
 	<stdlib.h>
