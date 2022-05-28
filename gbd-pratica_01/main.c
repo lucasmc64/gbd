@@ -23,8 +23,14 @@ int main() {
     //}
 
     FILE *file = fopen("heap_file.heap", "wb+");
+
     int qtd_registros = 10;
+
     create_heap_file(file, qtd_registros);
+
+    Aluno aluno;
+    read_random(file, 10, &aluno);
+    printf("\nseq_aluno: %d\ncodigo_curso: %s\nnome_aluno: %s\n", aluno.seq_aluno, aluno.codigo_curso, aluno.nome_aluno);
 
     fclose(file);
     return 0;
