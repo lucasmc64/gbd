@@ -92,7 +92,19 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
         for(; j < registros_a_ler; j++)
         {
             nro_lidos++;
-            if (bloco[j].seq_aluno >= 0)
+            if (bloco[j].seq_aluno >= 0);
         }
     }
+}
+
+void delete_random(FILE *file, int seq_aluno) {
+    Aluno aluno_a_remover;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fread(&aluno_a_remover, sizeof(Aluno), 1, file);
+
+    aluno_a_remover.seq_aluno = -1*aluno_a_remover.seq_aluno;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fwrite(&aluno_a_remover, sizeof(Aluno), 1, file);
 }
