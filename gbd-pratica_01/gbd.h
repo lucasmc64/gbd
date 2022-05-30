@@ -5,8 +5,8 @@
 
 typedef struct aluno {
     int seq_aluno;
-    char codigo_curso[3];
-    char nome_aluno[43];
+    char codigo_curso[4]; // 4 caracteres para ser 3 caracteres de curso + \0
+    char nome_aluno[42];
 } __attribute__((packed)) Aluno;
 
 // R02

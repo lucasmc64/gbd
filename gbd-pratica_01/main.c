@@ -1,6 +1,7 @@
 #include "gbd.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <math.h>
 
 int main() {
@@ -22,12 +23,21 @@ int main() {
     //  printf("%s\n", s);
     //}
 
-    FILE *file = fopen("heap_file.heap", "wb+");
+    FILE *file = fopen("/run/media/carmo/Storage/heap_file.heap", "ab+");
+    srand(time(NULL));
 
-    int qtd_registros = 10;
+    /* int qtd_registros = 802424000; */
 
-    create_heap_file(file, qtd_registros);
+    /* create_heap_file(file, qtd_registros); */
 
     fclose(file);
+
+#if defined (__WIN32) || defined (WIN32) || defined (__WIN32__) || defined (__NT__)
+    printf("Hello I'm on windows!\n");
+#elif defined (__unix__)
+    printf("Hello I'm on unix!\n");
+#endif
+
+    printf("%d\n", sizeof(Aluno));
     return 0;
 }
