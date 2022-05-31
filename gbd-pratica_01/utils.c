@@ -1,7 +1,13 @@
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define LINE_MAX_LENGTH 128
+#if defined(WIN32) || defined(__WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <windows.h>
+#elif defined(__unix__)
+#include <sys/sysinfo.h>
+#endif
 
 char* read_line()
 {
@@ -54,4 +60,32 @@ int file_exists(const char* path) {
         return 1;
     }
     return 0;
+}
+
+unsigned long long get_total_sys_memory()
+{
+#if defined(WIN32) || defined(__WIN32) || defined(__WIN32__) || defined(__NT__)
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
+    GlobalMemoryStatusEx(&status);
+    return status.ullTotalPhys;
+#elif defined(__unix__)
+    struct sysinfo info;
+    sysinfo(&info);
+    return info.totalram;
+#endif
+}
+
+// pego em: http://www.guyrutenberg.com/2007/09/22/profiling-code-using-clock_gettime/
+struct timespec diff(struct timespec start, struct timespec end)
+{
+	struct timespec temp;
+	if ((end.tv_nsec-start.tv_nsec)<0) {
+		temp.tv_sec = end.tv_sec-start.tv_sec-1;
+		temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+	} else {
+		temp.tv_sec = end.tv_sec-start.tv_sec;
+		temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+	}
+	return temp;
 }

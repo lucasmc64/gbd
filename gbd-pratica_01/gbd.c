@@ -1,4 +1,5 @@
 #include "gbd.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,7 +98,9 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
 
     fseek(file, 0, SEEK_SET);
 
-    clock_t start = clock();
+    struct timespec start, end;
+
+    clock_gettime(CLOCK_REALTIME, &start);
 
     Aluno* bloco = malloc(tam_bloco * sizeof(Aluno));
 
@@ -121,14 +124,17 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
             nro_lidos++;
             if (bloco[j].seq_aluno >= 0)
                 registros_validos++;
+
         }
 
         i += registros_a_ler;
     }
 
-    clock_t end = clock();
+    clock_gettime(CLOCK_REALTIME, &end);
 
-    printf("\nQuantidade de registros válidos: %d\nNro de Blocos Lidos: %d\nTempo de processamento: %fs\n", registros_validos, nro_lidos, (double) (end - start) / CLOCKS_PER_SEC);
+    struct timespec result = diff(start, end);
+
+    printf("\nQuantidade de registros válidos: %d\nNro de Blocos Lidos: %d\nTempo de processamento: %ld:%lds\n", registros_validos, nro_lidos, result.tv_sec, result.tv_nsec);
 
     free(bloco);
 }
@@ -146,11 +152,14 @@ void varredura_aleatoria(FILE *file) {
     /* printf("Aqui!\n"); */
     srand(time(NULL));
 
-    clock_t start = clock();
+    struct timespec start, end;
+
+    clock_gettime(CLOCK_REALTIME, &start);
 
     for(i = 0; i < total_registros / 100; i++)
     {
         int seq = rand() % total_registros;
+        fprintf(stderr, "Registro (%d/%d): %do registro\n", i+1, total_registros / 100, seq);
         fseek(file, sizeof(Aluno) * seq, SEEK_SET);
         fread(&a, sizeof(Aluno), 1, file);
         if (a.seq_aluno >= 0)
@@ -159,7 +168,9 @@ void varredura_aleatoria(FILE *file) {
             registros_invalidos++;
     }
 
-    clock_t end = clock();
+    clock_gettime(CLOCK_REALTIME, &end);
 
-    printf("\nTempo de acesso aleatório (a 1%% dos registros): %f\nRegistros válidos: %d\nRegistros inválidos: %d\n", (double) (end - start) / CLOCKS_PER_SEC, registros_validos, registros_invalidos);
+    struct timespec result = diff(start, end);
+// 10:23
+    printf("\nTempo de acesso aleatório (a 1%% dos registros): %ld:%lds\nRegistros válidos: %d\nRegistros inválidos: %d\n", result.tv_sec, result.tv_nsec, registros_validos, registros_invalidos);
 }

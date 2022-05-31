@@ -22,7 +22,21 @@ FILE* create_file(const char* path)
 
     if (strcmp(s_reg_num, "mem") == 0)
     {
-
+        unsigned long long totalMem = get_total_sys_memory();
+        reg_num = totalMem * 5 / sizeof(Aluno);
+        printf("O heap file que você está tentando criar terá %lld bytes (%ld registros). Deseja continuar? (yes/no)", totalMem, reg_num);
+        char *opt = read_line();
+        if (strcmp(opt, "yes") == 0)
+        {
+            printf("Criando arquivo heap grand. Isso demorará um tempo...\n");
+        }
+        else
+        {
+            printf("Cancelando operação...\n");
+            free(s_reg_num);
+            free(opt);
+            return NULL;
+        }
     }
     else
     {
@@ -34,6 +48,8 @@ FILE* create_file(const char* path)
     }
 
     create_heap_file(new_file, reg_num);
+
+    printf("Arquivo heap criado com sucesso.\n");
 
     free(s_reg_num);
     return new_file;
