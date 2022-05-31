@@ -46,12 +46,13 @@ void isrt_at_end(FILE *file) {
     fread(&teste, sizeof(Aluno), 1, file);
 
     a.seq_aluno = teste.seq_aluno + 1;
-    generate_string(a.codigo_curso, 3);
-    generate_string(a.nome_aluno, 43);
+    generate_string(a.codigo_curso, 4);
+    generate_string(a.nome_aluno, 42);
 
     printf("Novo aluno a ser adicionado: \nAluno %d:\nCurso: %s\nNome: %s\n", a.seq_aluno, a.codigo_curso, a.nome_aluno);
     printf("\n");
 
+    fseek(file, 0, SEEK_END);
     fwrite(&a, sizeof(Aluno), 1, file);
 }
 

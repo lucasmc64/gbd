@@ -24,7 +24,7 @@ FILE* create_file(const char* path)
     {
         unsigned long long totalMem = get_total_sys_memory();
         reg_num = totalMem * 5 / sizeof(Aluno);
-        printf("O heap file que você está tentando criar terá %lld bytes (%ld registros). Deseja continuar? (yes/no)", totalMem, reg_num);
+        printf("O heap file que você está tentando criar terá %lld bytes (%ld registros). Deseja continuar? (yes/no)", totalMem * 5, reg_num);
         char *opt = read_line();
         if (strcmp(opt, "yes") == 0)
         {
