@@ -19,8 +19,10 @@ char* read_line()
     {
         c = getchar();
         if (c == EOF) // stdin foi fechado
+        {
             free(buffer);
             return NULL;
+        }
 
         // Adiciona caractere de stdin no buffer. Se c for \n, finalizamos a string com \0 e retornamos o ponteiro.
         if(c == '\n')
@@ -42,4 +44,14 @@ char* read_line()
             return buffer;
         }
     }
+}
+
+int file_exists(const char* path) {
+    FILE* file_test;
+    if ((file_test = fopen(path, "r")))
+    {
+        fclose(file_test);
+        return 1;
+    }
+    return 0;
 }

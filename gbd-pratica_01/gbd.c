@@ -16,6 +16,13 @@ void generate_string(char *string , int length) {
 }
 
 void create_heap_file(FILE *file, int nro_de_registros) {
+    if (nro_de_registros < 0)
+    {
+        printf("Erro ao criar heap file: nro de registros < 0\n");
+        return;
+    }
+
+    fseek(file, 0, SEEK_SET);
     for(int i = 0; i < nro_de_registros; i++) {
         Aluno a;
 
@@ -44,7 +51,6 @@ void isrt_at_end(FILE *file) {
     printf("Novo aluno a ser adicionado: \nAluno %d:\nCurso: %s\nNome: %s\n", a.seq_aluno, a.codigo_curso, a.nome_aluno);
     printf("\n");
 
-
     fwrite(&a, sizeof(Aluno), 1, file);
 }
 
@@ -57,11 +63,26 @@ void read_random(FILE *file, int seq_aluno, Aluno *aluno) {
 void update_random(FILE *file, int seq_aluno, char *novo_nome, char *novo_codigo) {
     Aluno newAluno;
     newAluno.seq_aluno = seq_aluno;
-    strcpy(newAluno.nome_aluno, novo_nome);
-    strcpy(newAluno.codigo_curso, novo_codigo);
+    if (novo_nome != NULL)
+        strcpy(newAluno.nome_aluno, novo_nome);
+
+    if (novo_codigo != NULL)
+        strcpy(newAluno.codigo_curso, novo_codigo);
 
     fseek(file, sizeof(Aluno) * seq_aluno, SEEK_SET);
     fwrite(&newAluno, sizeof(Aluno), 1, file);
+}
+
+void delete_random(FILE *file, int seq_aluno) {
+    Aluno aluno_a_remover;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fread(&aluno_a_remover, sizeof(Aluno), 1, file);
+
+    aluno_a_remover.seq_aluno = (aluno_a_remover.seq_aluno >= 0) ? -1*aluno_a_remover.seq_aluno : aluno_a_remover.seq_aluno;
+
+    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
+    fwrite(&aluno_a_remover, sizeof(Aluno), 1, file);
 }
 
 void varredura_sequencial(FILE *file, int tam_bloco) {
@@ -70,6 +91,7 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
     fseek(file, -sizeof(Aluno), SEEK_END);
     fread(&a, sizeof(Aluno), 1, file);
 
+    a.seq_aluno = (a.seq_aluno < 0) ? -a.seq_aluno : a.seq_aluno; // faz o abs do último número de sequência. permite-nos encontrar o total de regs no arquivo.
     int total_registros = a.seq_aluno + 1, i = 0;
     int registros_validos = 0, nro_lidos = 0;
 
@@ -85,26 +107,59 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
         if (total_registros - i < tam_bloco)
             registros_a_ler = total_registros - i;
 
-        printf("Lendo %d registros...\n", registros_a_ler);
+        /* printf("Lendo %d registros... (registros lidos: %d)\n", registros_a_ler, i); */
 
-        fread(bloco, sizeof(Aluno), registros_a_ler, file);
+        if (fread(bloco, sizeof(Aluno), registros_a_ler, file) != registros_a_ler)
+        {
+            printf("Erro na leitura!");
+            free(bloco);
+            return;
+        }
 
         for(; j < registros_a_ler; j++)
         {
             nro_lidos++;
-            if (bloco[j].seq_aluno >= 0);
+            if (bloco[j].seq_aluno >= 0)
+                registros_validos++;
         }
+
+        i += registros_a_ler;
     }
+
+    clock_t end = clock();
+
+    printf("\nQuantidade de registros válidos: %d\nNro de Blocos Lidos: %d\nTempo de processamento: %fs\n", registros_validos, nro_lidos, (double) (end - start) / CLOCKS_PER_SEC);
+
+    free(bloco);
 }
 
-void delete_random(FILE *file, int seq_aluno) {
-    Aluno aluno_a_remover;
+void varredura_aleatoria(FILE *file) {
 
-    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
-    fread(&aluno_a_remover, sizeof(Aluno), 1, file);
+    Aluno a;
+    fseek(file, -sizeof(Aluno), SEEK_END);
+    fread(&a, sizeof(Aluno), 1, file);
 
-    aluno_a_remover.seq_aluno = -1*aluno_a_remover.seq_aluno;
+    a.seq_aluno = (a.seq_aluno < 0) ? -a.seq_aluno : a.seq_aluno; // faz o abs do último número de sequência. permite-nos encontrar o total de regs no arquivo.
+    int total_registros = a.seq_aluno + 1, i = 0;
+    int registros_validos = 0, registros_invalidos = 0;
 
-    fseek(file, seq_aluno * sizeof(Aluno), SEEK_SET);
-    fwrite(&aluno_a_remover, sizeof(Aluno), 1, file);
+    /* printf("Aqui!\n"); */
+    srand(time(NULL));
+
+    clock_t start = clock();
+
+    for(i = 0; i < total_registros / 100; i++)
+    {
+        int seq = rand() % total_registros;
+        fseek(file, sizeof(Aluno) * seq, SEEK_SET);
+        fread(&a, sizeof(Aluno), 1, file);
+        if (a.seq_aluno >= 0)
+            registros_validos++;
+        else
+            registros_invalidos++;
+    }
+
+    clock_t end = clock();
+
+    printf("\nTempo de acesso aleatório (a 1%% dos registros): %f\nRegistros válidos: %d\nRegistros inválidos: %d\n", (double) (end - start) / CLOCKS_PER_SEC, registros_validos, registros_invalidos);
 }
