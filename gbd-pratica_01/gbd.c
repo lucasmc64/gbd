@@ -122,12 +122,12 @@ void varredura_sequencial(FILE *file, int tam_bloco) {
 
         for(; j < registros_a_ler; j++)
         {
-            nro_lidos++;
             if (bloco[j].seq_aluno >= 0)
                 registros_validos++;
 
         }
 
+        nro_lidos++;
         i += registros_a_ler;
     }
 
