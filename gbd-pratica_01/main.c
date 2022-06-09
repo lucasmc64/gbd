@@ -6,6 +6,18 @@
 #include <string.h>
 #include <limits.h>
 
+/*
+** Trabalho R02-R04 GBD
+** Integrantes:
+** Mateus Carmo (11911BCC026)
+** Lucas Marçal (11911BCC012)
+** Lucas Mattos (11911BCC015)
+** Eduardo Ribeiro (11911BCC057)
+** Guilherme Henrique (11911BCC058)
+**
+** Instruções de Compilação: simplesmente compilar e linkar os 3 arquivos .c
+*/
+
 FILE* create_file(const char* path)
 {
     FILE* new_file = fopen(path, "wb+");

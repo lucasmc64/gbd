@@ -5,6 +5,18 @@
 #include <string.h>
 #include <time.h>
 
+/*
+** Trabalho R02-R04 GBD
+** Integrantes:
+** Mateus Carmo (11911BCC026)
+** Lucas Marçal (11911BCC012)
+** Lucas Mattos (11911BCC015)
+** Eduardo Ribeiro (11911BCC057)
+** Guilherme Henrique (11911BCC058)
+**
+** Instruções de Compilação: simplesmente compilar e linkar os 3 arquivos .c
+*/
+
 void generate_string(char *string , int length) {
     if(string == NULL || length < 0)
         return;
