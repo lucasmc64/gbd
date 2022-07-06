@@ -7,41 +7,143 @@
 /*
 ** Trabalho R06 GBD
 ** Integrantes:
-** Lucas Marçal (11911BCC012)
+** Lucas MarÃ§al (11911BCC012)
 ** Lucas Mattos (11911BCC015)
 **
-** Instruções de Compilação: simplesmente compilar e linkar os 3 arquivos .c
+** InstruÃ§Ãµes de CompilaÃ§Ã£o: simplesmente compilar e linkar os 3 arquivos .c
 */
 
-void criaArvore1(FILE *file) {
 
-    fseek(file, sizeof(arvore_1), SEEK_SET);    // anda o arquivo até a posição do primeiro nó
+void criaArvore(FILE *file, int alternativa) {
 
-    long int posicao_raiz = ftell(file);        // guarda a posição do nó raiz
+    fseek(file, sizeof(Arvore), SEEK_SET);    // anda o arquivo atÃ© a posiÃ§Ã£o do primeiro nÃ³
 
-    arvore_1 arvore;
-    arvore.raiz = posicao_raiz;                 // salva a posição da raiz na estrutura árvore
-    no_1 raiz = criaFolha1();
-    fwrite(&raiz, sizeof(no_1), file);          // salva a raiz no arquivo
+    long int posicao_raiz = ftell(file);        // guarda a posiÃ§Ã£o do nÃ³ raiz
+
+    Arvore arvore;
+    arvore.raiz = posicao_raiz;                 // salva a posiÃ§Ã£o da raiz na estrutura Ã¡rvore
+
+    if (alternativa == 1) {
+
+        No_1 raiz = criaNo1(true);
+        fwrite(&raiz, sizeof(No_1), 1, file);          // salva a raiz no arquivo
+
+    } else if (alternativa == 2) {
+
+        No_2 raiz = criaNo2(true);
+        fwrite(&raiz, sizeof(No_2), 1, file);          // salva a raiz no arquivo
+
+    } else {
+
+        No_3 raiz = criaNo3(true);
+        fwrite(&raiz, sizeof(No_3), 1, file);          // salva a raiz no arquivo
+
+    }
 
     fseek(file, 0, SEEK_SET);
-    fwrite(&arvore, sizeof(arvore_1), file);    // salva a estrutura da árvore no arquivo
+    fwrite(&arvore, sizeof(Arvore), 1, file);    // salva a estrutura da Ã¡rvore no arquivo
 }
 
-no_1 criaFolha1() {
-    no_1 folha;
-    folha.eh_folha = true;
-    folha.anterior = NULL;
-    folha.proximo = NULL;
-    folha.total_chaves = 0;
+No_1 criaNo1(bool folha) {
 
-    return folha;
+    No_1 no;
+
+    if (folha) {
+        no.eh_folha = true;
+        no.anterior = NULL;
+        no.proximo = NULL;
+    } else {
+        no.eh_folha = false;
+    }
+    
+    no.total_chaves = 0;
+
+    return no;
 }
 
-no_1 criaInterno1() {
-    no_1 interno;
-    folha.eh_folha = false;
-    folha.total_chaves = 0;
+No_2 criaNo2(bool folha) {
 
-    return folha;
+    No_2 no;
+
+    if (folha) {
+        no.eh_folha = true;
+        no.anterior = NULL;
+        no.proximo = NULL;
+    } else {
+        no.eh_folha = false;
+    }
+    
+    no.total_chaves = 0;
+
+    return no;
+}
+
+No_3 criaNo3(bool folha) {
+
+    No_3 no;
+
+    if (folha) {
+        no.eh_folha = true;
+        no.anterior = NULL;
+        no.proximo = NULL;
+    } else {
+        no.eh_folha = false;
+    }
+    
+    no.total_chaves = 0;
+
+    return no;
+}
+
+void insereArvore(FILE *file, Registro novo_reg, int alternativa) {
+
+    Arvore arvore;        
+    fread(&arvore, sizeof(Arvore), 1, file);  // lÃª a estrutura da Ã¡rvore
+
+    long int pos_raiz = arvore.raiz;
+
+    if (alternativa == 1) {
+
+        No_1 raiz;
+        fseek(file, pos_raiz, SEEK_SET);         // procura a raiz
+        fread(&raiz, sizeof(No_1), 1, file);
+
+        if (raiz.eh_folha) {
+
+            
+
+        } else {
+            // ...
+        }
+
+    } else if (alternativa == 2) {
+
+        No_2 raiz;
+        fseek(file, pos_raiz, SEEK_SET);         // procura a raiz
+        fread(&raiz, sizeof(No_2), 1, file);
+
+        if (raiz.eh_folha) {
+
+            // ...
+
+        } else {
+
+            // ...
+
+        }
+
+    } else {
+
+        No_3 raiz;
+        fseek(file, pos_raiz, SEEK_SET);         // procura a raiz
+        fread(&raiz, sizeof(No_3), 1, file);
+
+        if (raiz.eh_folha) {
+            // ...
+        } else {
+            // ...
+        }
+
+    }
+
 }
