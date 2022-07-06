@@ -20,8 +20,8 @@ No_1 criaNo1(bool folha) {
 
     if (folha) {
         no.eh_folha = true;
-        no.anterior = NULL;
-        no.proximo = NULL;
+        no.anterior = -1;
+        no.proximo = -1;
     } else {
         no.eh_folha = false;
     }
@@ -37,8 +37,8 @@ No_2 criaNo2(bool folha) {
 
     if (folha) {
         no.eh_folha = true;
-        no.anterior = NULL;
-        no.proximo = NULL;
+        no.anterior = -1;
+        no.proximo = -1;
     } else {
         no.eh_folha = false;
     }
@@ -54,8 +54,8 @@ No_3 criaNo3(bool folha) {
 
     if (folha) {
         no.eh_folha = true;
-        no.anterior = NULL;
-        no.proximo = NULL;
+        no.anterior = -1;
+        no.proximo = -1;
     } else {
         no.eh_folha = false;
     }
@@ -125,15 +125,10 @@ long int encontraFolha1(FILE *file, long int pos_raiz, int chave) { // encontra 
 
 }
 
-void insereFolha(No_1 *folha, Registro novo_reg) {
-
-    
-
-}
-
 void insereArvore(FILE *file, Registro novo_reg, int alternativa) {
 
-    Arvore arvore;        
+    Arvore arvore;    
+    fseek(file, 0, SEEK_SET);    
     fread(&arvore, sizeof(Arvore), 1, file);  // lê a estrutura da árvore
 
     long int pos_raiz = arvore.raiz;
@@ -146,10 +141,29 @@ void insereArvore(FILE *file, Registro novo_reg, int alternativa) {
         fseek(file, pos_folha, SEEK_SET);
         fread(&folha, sizeof(No_1), 1, file);
 
-        if (folha.total_chaves < ORDER) {
-            // insereFolha(...);
-        } else {
+        if (folha.total_chaves < ORDER) {       // insere sem split
+
+            Registro aux;
+            int i;
+
+            for (i = folha.total_chaves-1; i >= 0; i--) {
+                aux = folha.registros[i];
+                if (novo_reg.seq_aluno < aux.seq_aluno) {
+                    folha.registros[i+1] = aux;
+                } else {
+                    break;
+                }
+            }
+
+            folha.registros[i] = novo_reg;
+            folha.total_chaves++;
+
+            fseek(file, pos_folha, SEEK_SET);
+            fwrite(&folha, sizeof(No_1), 1, file);
+
+        } else {                                // insere com split
             // insereFolhaSplit(...);
+            printf("\nArvore cheia (por enquanto).");
         }
 
     } else if (alternativa == 2) {
@@ -165,3 +179,43 @@ void insereArvore(FILE *file, Registro novo_reg, int alternativa) {
 }
 
 // implementar busca por intervalo
+
+void imprimeArvore(FILE *file, int alternativa) {
+
+    printf("\nImprimindo Árvore alternativa %d: \n\n",alternativa);
+
+    fseek(file, 0, SEEK_END);
+    long int end = ftell(file);
+
+    fseek(file, sizeof(Arvore), SEEK_SET);
+    long int current = ftell(file);
+
+    if (alternativa == 1) {
+        No_1 no;
+
+        while (current < end) {
+            fread(&no, sizeof(No_1), 1, file);
+
+            if (no.total_chaves == 0) {
+                return;
+            }
+
+            printf("[");
+            if (no.eh_folha) {
+                Registro aux;
+                for (int i = 0; i < no.total_chaves-1; i++) {
+                    aux = no.registros[i];
+                    printf("%d*, ",aux.seq_aluno);
+                }
+                aux = no.registros[no.total_chaves-1];
+                printf("%d*",aux.seq_aluno);
+            } else {
+                for (int i = 0; i < no.total_chaves-1; i++) {
+                    printf("%d, ",no.chaves[i]);
+                }
+                printf("%d",no.chaves[no.total_chaves-1]);
+            }
+            printf("]\n");
+        }
+    }
+}

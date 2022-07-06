@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #define ORDER 3
 
 typedef struct REG_ALUNO {
@@ -42,3 +44,4 @@ typedef struct NO_TIPO_3 {
 
 void criaArvore(FILE *file, int alternativa);
 void insereArvore(FILE *file, Registro novo_reg, int alternativa);
+void imprimeArvore(FILE *file, int alternativa);
