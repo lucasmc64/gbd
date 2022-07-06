@@ -147,3 +147,5 @@ void insereArvore(FILE *file, Registro novo_reg, int alternativa) {
     }
 
 }
+
+// implementar busca por intervalo
